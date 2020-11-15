@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    android:orientation="vertical" >
-    ﻿
-    ﻿
+    android:orientation="vertical">
     <Button
         android:id="@+id/margin"
         android:layout_width="match_parent"
@@ -19,7 +17,8 @@
         android:id="@+id/hashSet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
         android:textSize="19dp"
         android:text="@string/library" />
 
