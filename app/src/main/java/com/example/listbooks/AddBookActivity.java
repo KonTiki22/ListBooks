@@ -19,10 +19,14 @@ public class AddBookActivity extends AppCompatActivity {
     {
         String title = ((EditText) this.findViewById(R.id.title)).getText().toString();
         String author = ((EditText) this.findViewById(R.id.author)).getText().toString();
-        Integer year = Integer.valueOf(((EditText) this.findViewById(R.id.year)).getText().toString());
+        String year = ((EditText) this.findViewById(R.id.year)).getText().toString();
+
+        if(!title.isEmpty() && !author.isEmpty() && !year.isEmpty()) {
+            SQLiteDatabase db = getBaseContext().openOrCreateDatabase("library.db", MODE_PRIVATE, null);
+            db.execSQL(String.format("INSERT INTO books VALUES (null, '%s', '%s', %s);", title, author, year));
+        }
+
         Intent intent = new Intent(this, MainActivity.class);
-        SQLiteDatabase db = getBaseContext().openOrCreateDatabase("library.db", MODE_PRIVATE, null);
-        db.execSQL(String.format("INSERT INTO books VALUES (null, '%s', '%s', %d);", title, author, year));
         startActivity(intent);
     }
     @Override
