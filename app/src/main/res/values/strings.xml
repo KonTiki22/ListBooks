@@ -1,4 +1,8 @@
 <resources>
     <string name="library">Моя библиотека</string>
-
+    <string name="list_title">Список книг</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="splash">Загрузка...</string>
+    <string name="about">О программе</string>
+    <string name="exit">Выход</string>
 </resources>

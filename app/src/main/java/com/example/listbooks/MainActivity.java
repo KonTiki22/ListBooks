@@ -1,6 +1,10 @@
 package com.example.listbooks;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,6 +12,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,7 +26,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
-    ListView listView;
+
+    RecyclerView recyclerView;
 
 
     public void addBook(View view)
@@ -28,6 +35,31 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddBookActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        //menu.findItem(R.id.about).setIntent(new Intent(MainActivity.this, AboutActivity.class));
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.about:
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                break;
+            case R.id.exit:
+                finishAffinity();
+                System.exit(0);
+                break;
+            default: break;
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,30 +84,17 @@ public class MainActivity extends AppCompatActivity {
             String title = libSQL.getString(libSQL.getColumnIndex("title"));
             String author = libSQL.getString(libSQL.getColumnIndex("author"));
             String year = libSQL.getString(libSQL.getColumnIndex("year"));
-            bookList.add(new Book(title, author, Integer.parseInt(year))); //add the item
+            bookList.add(new Book(title, author, Integer.parseInt(year)));
             libSQL.moveToNext();
         }
 
 
-        listView = findViewById(R.id.myList);
-        LinkedList<HashMap<String,String>> library = new LinkedList<>();
-        for (int i = 0; i < bookList.size(); i++) {
-            HashMap<String, String> book = new HashMap<>();
-            book.put("author", bookList.get(i).author);
-            book.put("title", bookList.get(i).title);
-            book.put("year", Integer.valueOf(bookList.get(i).year).toString());
-            library.add(book);
-        }
-        String[] from = {"author", "title", "year"};
-        int[] to = {R.id.author, R.id.title, R.id.year};
+        recyclerView = findViewById(R.id.recList);
+        MyAdapter adapter = new MyAdapter(this, bookList);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
 
-       // ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, bookList);
-
-        SimpleAdapter adapter = new SimpleAdapter(this, library, R.layout.list_item, from, to);
-        listView.setAdapter(adapter);
-
-        //Book book = new Book("Мы", "Замятин", 1924);
-        //ArrayList<Book> booksList = new ArrayList<>();
 
     }
 }
